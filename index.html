@@ -16,13 +16,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root{
-    --ink:#3E2A1F;
-    --paper:#F6EDE2;
-    --card:#FFF9F2;
-    --steel:#8A7160;
-    --steel-line:#E3D3BF;
-    --amber:#E2A63B;
-    --amber-deep:#B9812A;
+    --ink:#0B3D66;
+    --paper:#EAF3FB;
+    --card:#FFFFFF;
+    --steel:#5C7C99;
+    --steel-line:#CFE0F0;
+    --amber:#2E86DE;
+    --amber-deep:#1B5FA8;
     --leave:#C9683A;
     --leave-tint:#F5DFD1;
     --sick:#7A5FA0;
@@ -35,8 +35,8 @@
     --other-tint:#EFE4CE;
     --holiday-tint:#F1D4D6;
     --holiday-text:#8A2E38;
-    --weekend-tint:#EAE5D6;
-    --company-tint:#F3E0B8;
+    --weekend-tint:#E3EDF7;
+    --company-tint:#D6E9FB;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -58,16 +58,17 @@
     padding:22px 24px 20px;
     position:relative;
     overflow:hidden;
+    border-bottom:3px solid #FFFFFF;
   }
   .board-head::before{
     content:"";
     position:absolute; left:0; top:0; bottom:0; width:8px;
-    background:repeating-linear-gradient(135deg, var(--amber) 0 10px, var(--ink) 10px 20px);
+    background:repeating-linear-gradient(135deg, #FFFFFF 0 10px, var(--ink) 10px 20px);
   }
   .plate-row{display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-left:14px;}
   .plate-title{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:22px; letter-spacing:.5px;}
   .plate-title span{color:var(--amber);}
-  .plate-sub{color:#D9C4AE; font-size:13.5px; margin-top:2px; padding-left:14px;}
+  .plate-sub{color:#BBD4EC; font-size:13.5px; margin-top:2px; padding-left:14px;}
 
   /* ---- Month navigator ---- */
   .month-bar{
@@ -100,7 +101,7 @@
   }
   .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
   .cell{
-    background:var(--card); border:1px solid var(--steel-line); border-radius:8px;
+    background:var(--card); border:1px solid #FFFFFF; box-shadow:0 0 0 1px var(--steel-line); border-radius:8px;
     min-height:96px; padding:6px; cursor:pointer; position:relative;
     display:flex; flex-direction:column; gap:4px;
     transition:box-shadow .12s ease, transform .12s ease;
@@ -132,7 +133,7 @@
   .legend .dot{width:10px;height:10px;border-radius:3px; display:inline-block;}
 
   /* ---- Sidebar cards ---- */
-  .panel{background:var(--card); border:1px solid var(--steel-line); border-radius:10px; padding:16px; margin-bottom:16px;}
+  .panel{background:var(--card); border:2px solid #FFFFFF; box-shadow:0 0 0 1px var(--steel-line), 0 2px 8px rgba(15,61,102,.06); border-radius:10px; padding:16px; margin-bottom:16px;}
   .panel h2{font-size:14px; margin:0 0 12px; font-family:'JetBrains Mono',monospace; letter-spacing:.3px; display:flex; align-items:center; gap:8px;}
   .panel h2::before{content:""; width:8px; height:8px; background:var(--amber-deep); border-radius:2px;}
   label{display:block; font-size:12.5px; color:var(--steel); margin:10px 0 4px; font-weight:600;}
@@ -161,6 +162,8 @@
   .feed-item .when{color:var(--steel); font-size:11px; font-family:'JetBrains Mono',monospace;}
   .del-btn{background:none;border:none;color:var(--steel);cursor:pointer;font-size:14px;padding:0 2px;}
   .del-btn:hover{color:var(--holiday-text);}
+  .edit-btn{background:none;border:none;color:var(--steel);cursor:pointer;font-size:13px;padding:0 2px;}
+  .edit-btn:hover{color:var(--ot);}
   .empty{color:var(--steel); font-size:12.5px; padding:6px 0;}
 
   /* summary table */
@@ -257,6 +260,7 @@
         <label id="lblNote">Note (optional)</label>
         <input type="text" id="fNote" placeholder="e.g. Morning half-day, business trip to Tokyo">
         <button class="btn-primary" id="submitBtn">Save Booking</button>
+        <button class="modal-close" id="cancelEditBtn" style="display:none; margin-top:8px;">Cancel edit</button>
         <div class="hint" id="formHint"></div>
       </div>
 
@@ -329,7 +333,11 @@ const I18N = {
     locale: 'en-GB',
     toggleBtn: 'TH',
     exportBtn: 'Export Excel',
-    awayRatio: (count,total,pct) => `${count} / ${total} people away (${pct}%)`
+    awayRatio: (count,total,pct) => `${count} / ${total} people away (${pct}%)`,
+    editEntry: 'Edit',
+    deleteEntry: 'Delete',
+    editingHint: 'Editing an existing entry — Save Booking will apply the changes',
+    cancelEdit: 'Cancel edit'
   },
   th: {
     subtitle: 'วิศวกร / ช่างเครื่อง — จองวันลาและ Work From Home ร่วมกัน',
@@ -364,7 +372,11 @@ const I18N = {
     locale: 'th-TH',
     toggleBtn: 'EN',
     exportBtn: 'ส่งออก Excel',
-    awayRatio: (count,total,pct) => `ไม่อยู่ ${count} / ${total} คน (${pct}%)`
+    awayRatio: (count,total,pct) => `ไม่อยู่ ${count} / ${total} คน (${pct}%)`,
+    editEntry: 'แก้ไข',
+    deleteEntry: 'ลบ',
+    editingHint: 'กำลังแก้ไขรายการเดิม — กด "บันทึกการจอง" เพื่อบันทึกการแก้ไข',
+    cancelEdit: 'ยกเลิกการแก้ไข'
   }
 };
 function t(key){ return I18N[currentLang][key]; }
@@ -389,6 +401,7 @@ const MIN_DATE = '2025-05-01';
 const MAX_DATE = '2035-12-31';
 
 let bookings = []; // from shared storage
+let pendingEdit = null; // {id, source} of the entry currently being edited via the booking form, if any
 let cursor = new Date(); // current viewed month
 if (cursor < new Date(MIN_DATE)) cursor = new Date(MIN_DATE);
 if (cursor > new Date(MAX_DATE)) cursor = new Date(MAX_DATE);
@@ -451,27 +464,53 @@ async function deleteBookingRemote(id){
   await postAction({ action:'deleteBooking', id });
 }
 
+// ---------- imported-entry deletion/editing ----------
+// The 93 rows baked into DATA.entries are static and shipped to every
+// visitor, so we can't delete/rewrite them in place. Instead, "deleting" an
+// imported row writes a small tombstone booking (synced through the same
+// Apps Script backend as normal bookings) that everyone's client uses to
+// hide that row. "Editing" an imported row hides the original the same way
+// and then saves a fresh booking with the corrected details.
+const HIDDEN_IMPORTED_CATEGORY = '__hidden_imported__';
+
+function getHiddenImportedIds(){
+  return new Set(bookings.filter(b => b.category === HIDDEN_IMPORTED_CATEGORY).map(b => b.note));
+}
+
+async function hideImportedEntry(importedId){
+  if (getHiddenImportedIds().has(importedId)) return;
+  const tomb = {
+    id: 'hide-'+importedId+'-'+Date.now(),
+    date: todayStr(), name: '__system__', category: HIDDEN_IMPORTED_CATEGORY,
+    note: importedId, source: 'booked', createdAt: Date.now()
+  };
+  bookings.push(tomb);
+  await addBookingsRemote([tomb]);
+}
+
 // ---------- data access ----------
 function importedEntriesForDate(dateStr){
+  const hidden = getHiddenImportedIds();
   return DATA.entries.filter(e => e.date === dateStr).map(e => ({
     id: 'imp-'+dateStr+'-'+e.name,
     date: e.date, name: e.name,
     category: guessCategoryFromImported(e.type),
     note: e.type, source: 'imported', createdAt: null
-  }));
+  })).filter(e => !hidden.has(e.id));
 }
 function bookedEntriesForDate(dateStr){
-  return bookings.filter(b => toDateStr(b.date) === dateStr);
+  return bookings.filter(b => toDateStr(b.date) === dateStr && b.category !== HIDDEN_IMPORTED_CATEGORY);
 }
 function allEntriesForDate(dateStr){
   return importedEntriesForDate(dateStr).concat(bookedEntriesForDate(dateStr));
 }
 function allEntriesForEmployee(name){
+  const hidden = getHiddenImportedIds();
   const imp = DATA.entries.filter(e => e.name === name).map(e => ({
     id:'imp-'+e.date+'-'+e.name, date:e.date, name:e.name,
     category:guessCategoryFromImported(e.type), note:e.type, source:'imported'
-  }));
-  const bk = bookings.filter(b => b.name === name);
+  })).filter(e => !hidden.has(e.id));
+  const bk = bookings.filter(b => b.name === name && b.category !== HIDDEN_IMPORTED_CATEGORY);
   return imp.concat(bk).sort((a,b)=> toDateStr(a.date).localeCompare(toDateStr(b.date)));
 }
 
@@ -583,12 +622,13 @@ function openDayModal(dateStr){
   } else {
     html += entries.map(e => {
       const cat = CATS[e.category] || CATS.leave;
-      const del = e.source !== 'imported' ? `<button class="del-btn" data-del="${e.id}">✕</button>` : `<span class="mono" style="font-size:10px;color:var(--steel)">${t('original')}</span>`;
+      const originTag = e.source === 'imported' ? `<span class="mono" style="font-size:9px;color:var(--steel);margin-left:6px;">${t('original')}</span>` : '';
       return `<div class="modal-entry">
-        <span>${e.name} ${e.note ? '· '+e.note : ''}</span>
-        <span style="display:flex;align-items:center;gap:8px">
+        <span>${e.name} ${e.note ? '· '+e.note : ''}${originTag}</span>
+        <span style="display:flex;align-items:center;gap:6px">
           <span class="tag" style="background:${cat.color}22;color:${cat.color}">${catLabel(cat)}</span>
-          ${del}
+          <button class="edit-btn" data-edit="${e.id}" title="${t('editEntry')}">✎</button>
+          <button class="del-btn" data-del="${e.id}" data-imported="${e.source === 'imported'}" title="${t('deleteEntry')}">✕</button>
         </span>
       </div>`;
     }).join('');
@@ -601,6 +641,7 @@ function openDayModal(dateStr){
   document.getElementById('closeDayModal').onclick = () => document.getElementById('dayOverlay').classList.remove('show');
   document.getElementById('quickbookBtn').onclick = () => {
     document.getElementById('dayOverlay').classList.remove('show');
+    cancelEditEntry();
     document.getElementById('fStart').value = dateStr;
     document.getElementById('fEnd').value = dateStr;
     document.getElementById('fName').scrollIntoView({behavior:'smooth', block:'center'});
@@ -608,10 +649,24 @@ function openDayModal(dateStr){
   document.querySelectorAll('[data-del]').forEach(btn => {
     btn.onclick = async () => {
       const id = btn.getAttribute('data-del');
-      bookings = bookings.filter(b => b.id !== id);
-      await deleteBookingRemote(id);
+      const isImported = btn.getAttribute('data-imported') === 'true';
+      if (isImported){
+        await hideImportedEntry(id);
+      } else {
+        bookings = bookings.filter(b => b.id !== id);
+        await deleteBookingRemote(id);
+      }
       document.getElementById('dayOverlay').classList.remove('show');
       renderAll();
+    };
+  });
+  document.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.getAttribute('data-edit');
+      const entry = entries.find(x => x.id === id);
+      if (!entry) return;
+      document.getElementById('dayOverlay').classList.remove('show');
+      startEditEntry(entry);
     };
   });
 }
@@ -620,6 +675,30 @@ function openDayModal(dateStr){
 function populateNameSelect(){
   const sel = document.getElementById('fName');
   sel.innerHTML = DATA.names.map(n => `<option value="${n}">${n}</option>`).join('');
+}
+
+// Prefills the booking form with an existing entry (imported or booked) so
+// the user can correct it. Submitting the form then both hides/removes the
+// original and saves the corrected entry as a fresh booking.
+function startEditEntry(entry){
+  pendingEdit = { id: entry.id, source: entry.source };
+  document.getElementById('fName').value = entry.name;
+  document.getElementById('fType').value = entry.category;
+  const dateStr = toDateStr(entry.date);
+  document.getElementById('fStart').value = dateStr;
+  document.getElementById('fEnd').value = dateStr;
+  document.getElementById('fNote').value = entry.note || '';
+  document.getElementById('cancelEditBtn').style.display = 'block';
+  const hint = document.getElementById('formHint');
+  hint.textContent = t('editingHint');
+  hint.style.color = 'var(--ot)';
+  document.getElementById('fName').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function cancelEditEntry(){
+  pendingEdit = null;
+  document.getElementById('cancelEditBtn').style.display = 'none';
+  document.getElementById('formHint').textContent = '';
 }
 
 async function handleSubmit(){
@@ -649,6 +728,18 @@ async function handleSubmit(){
   }
   bookings.push(...newBookings);
   await addBookingsRemote(newBookings);
+
+  if (pendingEdit){
+    if (pendingEdit.source === 'imported'){
+      await hideImportedEntry(pendingEdit.id);
+    } else {
+      bookings = bookings.filter(b => b.id !== pendingEdit.id);
+      await deleteBookingRemote(pendingEdit.id);
+    }
+    pendingEdit = null;
+    document.getElementById('cancelEditBtn').style.display = 'none';
+  }
+
   hint.textContent = t('bookingSaved')(name, span+1);
   hint.style.color = 'var(--wfh)';
   document.getElementById('fNote').value = '';
@@ -660,7 +751,7 @@ async function handleSubmit(){
 // ---------- recent feed ----------
 function renderFeed(){
   const feed = document.getElementById('feed');
-  const recent = bookings.slice().sort((a,b)=> b.createdAt - a.createdAt).slice(0,6);
+  const recent = bookings.filter(b => b.category !== HIDDEN_IMPORTED_CATEGORY).sort((a,b)=> b.createdAt - a.createdAt).slice(0,6);
   if (recent.length === 0){
     feed.innerHTML = `<div class="empty">${t('noNewBookings')}</div>`;
     return;
@@ -748,17 +839,23 @@ function applyStaticText(){
   document.getElementById('footerText').textContent = t('footer');
   document.getElementById('langToggle').textContent = t('toggleBtn');
   document.getElementById('exportBtn').textContent = t('exportBtn');
+  document.getElementById('cancelEditBtn').textContent = t('cancelEdit');
 }
 
 // ---------- export to excel ----------
 function getAllEntriesCombined(){
-  const imported = DATA.entries.map(e => ({
-    date: e.date, name: e.name,
-    category: guessCategoryFromImported(e.type), note: e.type, source: 'imported'
-  }));
-  const booked = bookings.map(b => ({
-    date: toDateStr(b.date), name: b.name, category: b.category, note: b.note || '', source: 'booked'
-  }));
+  const hidden = getHiddenImportedIds();
+  const imported = DATA.entries
+    .filter(e => !hidden.has('imp-'+e.date+'-'+e.name))
+    .map(e => ({
+      date: e.date, name: e.name,
+      category: guessCategoryFromImported(e.type), note: e.type, source: 'imported'
+    }));
+  const booked = bookings
+    .filter(b => b.category !== HIDDEN_IMPORTED_CATEGORY)
+    .map(b => ({
+      date: toDateStr(b.date), name: b.name, category: b.category, note: b.note || '', source: 'booked'
+    }));
   return imported.concat(booked).sort((a,b) => a.date.localeCompare(b.date) || a.name.localeCompare(b.name));
 }
 
@@ -811,6 +908,7 @@ async function init(){
   document.getElementById('prevBtn').addEventListener('click', () => shiftMonth(-1));
   document.getElementById('nextBtn').addEventListener('click', () => shiftMonth(1));
   document.getElementById('submitBtn').addEventListener('click', handleSubmit);
+  document.getElementById('cancelEditBtn').addEventListener('click', cancelEditEntry);
   document.getElementById('empSearch').addEventListener('input', (e) => renderSummary(e.target.value));
   document.getElementById('dayOverlay').addEventListener('click', (e) => { if (e.target.id === 'dayOverlay') e.target.classList.remove('show'); });
   document.getElementById('empOverlay').addEventListener('click', (e) => { if (e.target.id === 'empOverlay') e.target.classList.remove('show'); });
