@@ -37,12 +37,26 @@
     --holiday-text:#8A2E38;
     --weekend-tint:#E3EDF7;
     --company-tint:#D6E9FB;
+    --page-text:#5C7C99;
+    --sub:#BBD4EC;
+    --hi:#2E86DE;
   }
+  /* ---- theme palettes (picked from the theme menu; default = blue-white) ---- */
+  [data-theme="winter"] {--ink:#1F3A5F; --paper:#D9E6F3; --steel:#56728F; --page-text:#56728F; --steel-line:#BFD2E6; --amber:#5AA9E6; --amber-deep:#2F6FAE; --weekend-tint:#E6EEF7; --sub:#C6DBF0; --hi:#9CD0FF;}
+  [data-theme="spring"] {--ink:#2F6B4A; --paper:#F1F8EA; --steel:#5F8468; --page-text:#5F8468; --steel-line:#D3E6CB; --amber:#E87FA5; --amber-deep:#C2557F; --weekend-tint:#FBEAF0; --sub:#CFE8D4; --hi:#FFB7CF;}
+  [data-theme="autumn"] {--ink:#6B3A1E; --paper:#FBF0E0; --steel:#8E6A4E; --page-text:#8E6A4E; --steel-line:#ECD6B8; --amber:#E08A2E; --amber-deep:#B8611A; --weekend-tint:#F6E4CB; --sub:#EBCFB2; --hi:#FFC46B;}
+  [data-theme="rain"]   {--ink:#2C3E50; --paper:#E1E8EE; --steel:#5F7383; --page-text:#5F7383; --steel-line:#C6D2DC; --amber:#4A90A4; --amber-deep:#2F6F84; --weekend-tint:#D6DFE7; --sub:#BFCDD8; --hi:#8FD0E3;}
+  [data-theme="firefly"]{--ink:#13291F; --paper:#0E1C17; --steel:#5E7A6C; --page-text:#A9C8B6; --steel-line:#D3E2D8; --amber:#C8E86B; --amber-deep:#4E8A3E; --weekend-tint:#E8F0E6; --sub:#9FC2AE; --hi:#E4F57A;}
+  [data-theme="sky"]    {--ink:#1E5E9A; --paper:#D6EDFF; --steel:#55799A; --page-text:#2F6A9C; --steel-line:#BCDDF5; --amber:#4FB0F0; --amber-deep:#2A86CC; --weekend-tint:#EAF5FE; --sub:#CDE7FA; --hi:#FFE38A;}
+  [data-theme="galaxy"] {--ink:#171238; --paper:#0B0920; --steel:#6A6390; --page-text:#BDB5EE; --steel-line:#DCD6F2; --amber:#A78BFA; --amber-deep:#6D4FD8; --weekend-tint:#F0ECFC; --sub:#B9B2EA; --hi:#C9B8FF;}
+  [data-theme="meadow"] {--ink:#3D6B2A; --paper:#EDF6DE; --steel:#617D52; --page-text:#4F7A3A; --steel-line:#D2E6BF; --amber:#E9C23B; --amber-deep:#5E9A3A; --weekend-tint:#F4F9E8; --sub:#D6EBC2; --hi:#FFE27A;}
+  [data-theme="wind"]   {--ink:#2A6468; --paper:#EAF5F2; --steel:#5C8583; --page-text:#4E7D7A; --steel-line:#CBE3DD; --amber:#3FA796; --amber-deep:#2A8273; --weekend-tint:#DDEEE9; --sub:#C2E2DC; --hi:#8DE0CE;}
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--paper);
     color:var(--ink);
+    transition:background .5s;
     font-family:'Sarabun',-apple-system,BlinkMacSystemFont,sans-serif;
     font-size:15px;
     line-height:1.5;
@@ -75,15 +89,72 @@
   .fx.aurora i:nth-child(2){background:rgba(120,225,205,.50); right:-6%; top:30%;}
   .fx.aurora i:nth-child(3){background:rgba(175,150,255,.45); left:30%; bottom:-10%;}
   @keyframes fxDrift{from{transform:translate(0,0) scale(1);} to{transform:translate(9vw,-6vh) scale(1.25);}}
+
+  /* -- seasons -- */
+  .fx.winter i{top:-20px; border-radius:50%; background:#fff; box-shadow:0 0 6px rgba(120,165,210,.75); animation:fxSnow linear infinite;}
+  @keyframes fxSnow{0%{transform:translate(0,0);} 25%{transform:translate(18px,28vh);} 50%{transform:translate(-12px,56vh);} 75%{transform:translate(16px,84vh);} 100%{transform:translate(-6px,112vh);}}
+  .fx.spring i{top:-30px; border-radius:80% 0 80% 0; animation:fxPetal linear infinite;}
+  @keyframes fxPetal{0%{transform:translate(0,0) rotate(0deg); opacity:0;} 8%{opacity:1;} 50%{transform:translate(70px,56vh) rotate(260deg);} 100%{transform:translate(30px,114vh) rotate(560deg); opacity:.3;}}
+  .fx.autumn i{top:-40px; border-radius:4% 70% 6% 70%; animation:fxLeaf ease-in-out infinite;}
+  @keyframes fxLeaf{0%{transform:translate(0,0) rotate(-20deg);} 20%{transform:translate(60px,22vh) rotate(60deg);} 40%{transform:translate(-30px,45vh) rotate(-50deg);} 60%{transform:translate(55px,68vh) rotate(80deg);} 80%{transform:translate(-20px,92vh) rotate(-30deg);} 100%{transform:translate(30px,116vh) rotate(70deg);}}
+  .fx.rain i{top:-120px; width:1.5px; border-radius:2px; animation:fxRain linear infinite;}
+  .fx.page.rain i{background:linear-gradient(to bottom, rgba(60,105,135,0), rgba(60,105,135,.55));}
+  .fx.head.rain i{background:linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.6));}
+  @keyframes fxRain{from{transform:translate(0,0) rotate(12deg);} to{transform:translate(-26vh,125vh) rotate(12deg);}}
+  /* -- nature -- */
+  .fx.page.firefly{background:radial-gradient(ellipse at 50% 110%, rgba(40,90,55,.55), transparent 60%);}
+  .fx.firefly i{border-radius:50%; background:#F3FF9A; box-shadow:0 0 8px 3px rgba(214,255,110,.75), 0 0 22px 8px rgba(190,255,90,.25);
+    animation:fxFfMove ease-in-out infinite alternate, fxFfGlow ease-in-out infinite;}
+  @keyframes fxFfMove{0%{transform:translate(0,0);} 33%{transform:translate(var(--dx1),var(--dy1));} 66%{transform:translate(var(--dx2),var(--dy2));} 100%{transform:translate(var(--dx3),var(--dy3));}}
+  @keyframes fxFfGlow{0%,100%{opacity:.05;} 45%,60%{opacity:1;}}
+  .fx.page.sky{background:linear-gradient(to bottom, #9ED4FF 0%, #D6EDFF 55%, #F2F9FF 100%);}
+  .fx.sky i.cloud{border-radius:50%; background:#fff; filter:blur(6px); animation:fxCloud linear infinite;}
+  .fx.sky i.cloud::before, .fx.sky i.cloud::after{content:""; position:absolute; background:#fff; border-radius:50%;}
+  .fx.sky i.cloud::before{width:55%; height:130%; left:15%; bottom:30%;}
+  .fx.sky i.cloud::after{width:40%; height:100%; right:12%; bottom:25%;}
+  @keyframes fxCloud{from{transform:translateX(-30vw);} to{transform:translateX(130vw);}}
+  .fx.sky i.sun{right:6%; top:4%; width:180px; height:180px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,240,170,.95) 0 28%, rgba(255,226,120,.35) 45%, transparent 70%); animation:fxSun 6s ease-in-out infinite;}
+  @keyframes fxSun{0%,100%{transform:scale(1);} 50%{transform:scale(1.12);}}
+  .fx.page.galaxy{background:
+      radial-gradient(ellipse at 20% 30%, rgba(124,77,255,.35), transparent 45%),
+      radial-gradient(ellipse at 80% 65%, rgba(236,72,153,.22), transparent 45%),
+      radial-gradient(ellipse at 55% 10%, rgba(56,189,248,.18), transparent 40%);
+    animation:fxNebula 30s ease-in-out infinite alternate;}
+  @keyframes fxNebula{from{background-position:0 0,0 0,0 0;} to{background-position:60px 40px,-50px -30px,30px 50px;}}
+  .fx.galaxy i.star{border-radius:50%; background:#fff; animation:fxStar ease-in-out infinite;}
+  @keyframes fxStar{0%,100%{opacity:.15; transform:scale(.6);} 50%{opacity:1; transform:scale(1.2);}}
+  .fx.galaxy i.shoot{width:140px; height:2px; border-radius:2px; background:linear-gradient(to right, rgba(255,255,255,0), #fff);
+    transform-origin:right center; animation:fxShoot linear infinite; opacity:0;}
+  @keyframes fxShoot{0%{transform:translate(0,0) rotate(-28deg); opacity:0;} 2%{opacity:1;} 9%{transform:translate(-46vw,26vw) rotate(-28deg); opacity:0;} 100%{opacity:0; transform:translate(-46vw,26vw) rotate(-28deg);}}
+  .fx.page.meadow{background:linear-gradient(to bottom, #EDF6DE 0%, #E2F0CD 70%, #CFE6AE 100%);}
+  .fx.meadow i.blade{bottom:-6px; width:6px; border-radius:100% 100% 0 0; transform-origin:bottom center; animation:fxSway ease-in-out infinite alternate;}
+  @keyframes fxSway{from{transform:rotate(var(--a1));} to{transform:rotate(var(--a2));}}
+  .fx.meadow i.pollen{border-radius:50%; background:rgba(255,240,150,.95); box-shadow:0 0 6px rgba(255,230,120,.8); animation:fxPollen linear infinite;}
+  @keyframes fxPollen{0%{transform:translate(0,0); opacity:0;} 10%{opacity:1;} 50%{transform:translate(40px,-35vh);} 100%{transform:translate(-20px,-75vh); opacity:0;}}
+  .fx.meadow i.fly{width:14px; height:10px; animation:fxFlyPath ease-in-out infinite alternate;}
+  .fx.meadow i.fly::before, .fx.meadow i.fly::after{content:""; position:absolute; top:0; width:7px; height:10px; border-radius:60% 60% 40% 40%; background:var(--c); animation:fxFlap .25s ease-in-out infinite alternate;}
+  .fx.meadow i.fly::before{left:0; transform-origin:right center;}
+  .fx.meadow i.fly::after{right:0; transform-origin:left center;}
+  @keyframes fxFlap{from{transform:scaleX(1);} to{transform:scaleX(.25);}}
+  @keyframes fxFlyPath{0%{transform:translate(0,0);} 50%{transform:translate(var(--dx1),var(--dy1));} 100%{transform:translate(var(--dx2),var(--dy2));}}
+  .fx.wind i.gust{left:-45%; height:2px; border-radius:2px; animation:fxGust ease-in infinite;}
+  .fx.page.wind i.gust{background:linear-gradient(to right, rgba(63,167,150,0), rgba(63,167,150,.45), rgba(63,167,150,0));}
+  .fx.head.wind i.gust{background:linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,.55), rgba(255,255,255,0));}
+  @keyframes fxGust{0%{transform:translate(0,0); opacity:0;} 15%{opacity:1;} 50%{transform:translate(90vw,-14px);} 100%{transform:translate(190vw,10px); opacity:0;}}
+  .fx.wind i.blow{left:-40px; border-radius:4% 70% 6% 70%; animation:fxBlow linear infinite;}
+  @keyframes fxBlow{0%{transform:translate(0,0) rotate(0deg);} 30%{transform:translate(36vw,-30px) rotate(300deg);} 60%{transform:translate(70vw,26px) rotate(620deg);} 100%{transform:translate(115vw,-10px) rotate(1000deg);}}
   @media (prefers-reduced-motion: reduce){ .fx, .fx i{animation:none !important;} }
   .plate-row, .plate-sub{position:relative; z-index:1;}
-  .fx-select{width:auto; font-family:'Sarabun',sans-serif; font-size:13px; font-weight:600; border:1px solid #6DA5D8; background:#0F4C7D; color:#fff; border-radius:6px; padding:5px 8px; cursor:pointer;}
+  .fx-select{width:auto; font-family:'Sarabun',sans-serif; font-size:13px; font-weight:600; border:1px solid rgba(255,255,255,.5); background:rgba(255,255,255,.12); color:#fff; border-radius:6px; padding:5px 8px; cursor:pointer;}
+  .fx-select option, .fx-select optgroup{color:#123; background:#fff;}
 
 
   /* ---- Header / board plate ---- */
   .board-head{
     background:var(--ink);
-    color:var(--paper);
+    color:#F4F8FC;
+    transition:background .5s;
     padding:22px 24px 20px;
     position:relative;
     overflow:hidden;
@@ -96,8 +167,8 @@
   }
   .plate-row{display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:8px; padding-left:14px;}
   .plate-title{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:22px; letter-spacing:.5px;}
-  .plate-title span{color:var(--amber);}
-  .plate-sub{color:#BBD4EC; font-size:13.5px; margin-top:2px; padding-left:14px;}
+  .plate-title span{color:var(--hi);}
+  .plate-sub{color:var(--sub); font-size:13.5px; margin-top:2px; padding-left:14px;}
 
   /* ---- Month navigator ---- */
   .month-bar{
@@ -125,7 +196,7 @@
   /* ---- Calendar ---- */
   .cal-weekdays{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; padding:0 0 6px;}
   .cal-weekdays div{
-    text-align:center; font-size:12px; color:var(--steel); font-weight:600;
+    text-align:center; font-size:12px; color:var(--page-text); font-weight:600;
     font-family:'JetBrains Mono',monospace; letter-spacing:.4px;
   }
   .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px;}
@@ -137,6 +208,7 @@
   }
   .cell:hover{box-shadow:0 3px 10px rgba(27,32,39,.12); transform:translateY(-1px);}
   .cell.out{opacity:.35;}
+  [data-theme="firefly"] .cell.out, [data-theme="galaxy"] .cell.out{opacity:.6;}
   .cell.weekend{background:var(--weekend-tint);}
   .cell.holiday{background:var(--holiday-tint);}
   .cell.company{background:var(--company-tint);}
@@ -154,10 +226,10 @@
   .chip.wfh{background:var(--wfh-tint); color:var(--wfh);}
   .chip.ot{background:var(--ot-tint); color:var(--ot);}
   .chip.other{background:var(--other-tint); color:var(--other);}
-  .chip.more{background:var(--ink); color:var(--paper);}
+  .chip.more{background:var(--ink); color:#fff;}
 
   /* ---- Legend ---- */
-  .legend{display:flex; flex-wrap:wrap; gap:10px 16px; padding:14px 20px 0; font-size:12.5px; color:var(--steel);}
+  .legend{display:flex; flex-wrap:wrap; gap:10px 16px; padding:14px 20px 0; font-size:12.5px; color:var(--page-text);}
   .legend .sw{display:inline-flex; align-items:center; gap:6px;}
   .legend .dot{width:10px;height:10px;border-radius:3px; display:inline-block;}
 
@@ -235,7 +307,7 @@
   .empdetail-list{margin-top:8px; max-height:220px; overflow:auto;}
   .empdetail-list div{font-size:12.5px; padding:4px 0; border-bottom:1px solid #EDE0D0;}
 
-  footer{padding:18px 24px 0; font-size:11.5px; color:var(--steel); text-align:center;}
+  footer{padding:18px 24px 0; font-size:11.5px; color:var(--page-text); text-align:center;}
 </style>
 </head>
 <body>
@@ -247,7 +319,7 @@
     <div class="plate-row">
       <div class="plate-title">ATS <span>ROSTER</span> BOARD</div>
       <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-        <select id="fxSelect" class="fx-select" aria-label="Animation"></select>
+        <select id="fxSelect" class="fx-select" aria-label="Theme"></select>
         <button id="exportBtn" style="background:var(--wfh); color:#fff; border:none; border-radius:6px; padding:6px 14px; font-weight:700; font-size:13px; cursor:pointer; font-family:'JetBrains Mono',monospace;">Export Excel</button>
         <button id="langToggle" style="background:var(--amber-deep); color:#fff; border:none; border-radius:6px; padding:6px 14px; font-weight:700; font-size:13px; cursor:pointer; font-family:'JetBrains Mono',monospace;">TH</button>
       </div>
@@ -313,7 +385,7 @@
   </div>
 
   <footer id="footerText">93 existing leave records imported from the original Work Calendar file (May 2025 – Dec 2027) — only new bookings made through this page can be edited</footer>
-  <div style="text-align:center; padding:8px 0 20px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--steel); opacity:.6;">build: 2026-11-11-v4-ats-fx</div>
+  <div style="text-align:center; padding:8px 0 20px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--page-text); opacity:.6;">build: 2026-11-19-v6-sky-default</div>
 </div>
 
 <div class="overlay" id="dayOverlay">
@@ -333,7 +405,7 @@ let currentLang = 'en';
 
 const I18N = {
   en: {
-    subtitle: 'Engineer Mechanic — Book leave & work from home',
+    subtitle: 'Engineer — Book leave & work from home',
     weekdays: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
     months: ['January','February','March','April','May','June','July','August','September','October','November','December'],
     bookTitle: 'Book Leave / OT',
@@ -372,7 +444,7 @@ const I18N = {
     cancelEdit: 'Cancel edit'
   },
   th: {
-    subtitle: 'วิศวกร / ช่างเครื่อง — จองวันลาและ Work From Home ร่วมกัน',
+    subtitle: 'วิศวกร — จองวันลาและ Work From Home ร่วมกัน',
     weekdays: ['จ.','อ.','พ.','พฤ.','ศ.','ส.','อา.'],
     months: ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'],
     bookTitle: 'จองวันลา / โอที',
@@ -839,16 +911,32 @@ function openEmpModal(name){
 
 
 // ---------- animated background ----------
-const FX_KEY = 'atsRosterFx';
+const FX_KEY = 'atsRosterTheme';
+// Each option = palette (data-theme) + animation. The 'classic' group keeps the
+// original blue-white colors with the first set of animations.
+const FX_GROUPS = {
+  classic: {en:'Blue-white',  th:'ฟ้า-ขาว'},
+  season:  {en:'Seasons',     th:'ฤดูกาล'},
+  nature:  {en:'Nature',      th:'ธรรมชาติ'}
+};
 const FX_STYLES = [
-  {id:'none',    en:'No animation',    th:'ไม่มีภาพเคลื่อนไหว'},
-  {id:'bubbles', en:'Bubbles',         th:'ฟองลอย'},
-  {id:'sparkle', en:'Sparkles',        th:'ประกายดาว'},
-  {id:'wave',    en:'Color waves',     th:'คลื่นไล่สี'},
-  {id:'petals',  en:'Falling petals',  th:'กลีบดอกไม้ร่วง'},
-  {id:'aurora',  en:'Aurora',          th:'แสงออโรร่า'}
+  {id:'none',    group:'classic', icon:'◻',  en:'No animation',    th:'ไม่มีภาพเคลื่อนไหว'},
+  {id:'bubbles', group:'classic', icon:'🫧', en:'Bubbles',         th:'ฟองลอย'},
+  {id:'sparkle', group:'classic', icon:'✦',  en:'Sparkles',        th:'ประกายดาว'},
+  {id:'wave',    group:'classic', icon:'〰', en:'Color waves',     th:'คลื่นไล่สี'},
+  {id:'petals',  group:'classic', icon:'🌷', en:'Falling petals',  th:'กลีบดอกไม้ร่วง'},
+  {id:'aurora',  group:'classic', icon:'🌈', en:'Aurora',          th:'แสงออโรร่า'},
+  {id:'winter',  group:'season',  icon:'❄',  en:'Winter · Snow',   th:'หิมะ'},
+  {id:'spring',  group:'season',  icon:'🌸', en:'Spring',          th:'ใบไม้ผลิ'},
+  {id:'autumn',  group:'season',  icon:'🍂', en:'Autumn',          th:'ใบไม้ร่วง'},
+  {id:'rain',    group:'season',  icon:'🌧', en:'Rain',            th:'ฝน'},
+  {id:'firefly', group:'nature',  icon:'✨', en:'Fireflies',       th:'หิ่งห้อย'},
+  {id:'sky',     group:'nature',  icon:'☁',  en:'Sky',             th:'ท้องฟ้า'},
+  {id:'galaxy',  group:'nature',  icon:'🌌', en:'Galaxy',          th:'กาแลคซี่'},
+  {id:'meadow',  group:'nature',  icon:'🌿', en:'Meadow',          th:'ทุ่งหญ้า'},
+  {id:'wind',    group:'nature',  icon:'🍃', en:'Wind',            th:'ลม'}
 ];
-let currentFx = 'bubbles';
+let currentFx = 'sky';
 try { const saved = localStorage.getItem(FX_KEY); if (FX_STYLES.some(s => s.id === saved)) currentFx = saved; } catch(e) {}
 
 function fillFxLayer(layer, base, kind, scale){
@@ -869,18 +957,83 @@ function fillFxLayer(layer, base, kind, scale){
     const s = rnd(9,18); el.style.cssText = `left:${rnd(-5,100)}%;width:${s}px;height:${s}px;animation-duration:${rnd(8,17)}s;animation-delay:${-rnd(0,17)}s;`;
   });
   if (kind === 'aurora') add(3, (el,k) => { el.style.animationDuration = (11+k*4)+'s'; });
+
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+  const px = v => Math.round(v) + 'px';
+  const addC = (n, cls, fn) => add(n, (el,k) => { el.className = cls; fn(el,k); });
+  const isHead = base === 'head';
+  if (kind === 'winter') add(Math.round(60*scale), el => {
+    const s = rnd(3,9); el.style.cssText = `left:${rnd(0,100)}%;width:${s}px;height:${s}px;opacity:${rnd(.6,1)};animation-duration:${rnd(8,18)}s;animation-delay:${-rnd(0,18)}s;`;
+  });
+  if (kind === 'spring') add(Math.round(30*scale), el => {
+    const s = rnd(9,17); el.style.cssText = `left:${rnd(-5,100)}%;width:${s}px;height:${s}px;background:${pick(['linear-gradient(135deg,#FFD3E0,#FF9EBB)','linear-gradient(135deg,#FFE9F0,#FFB7CF)','linear-gradient(135deg,#FFFFFF,#FFD0DE)'])};animation-duration:${rnd(9,18)}s;animation-delay:${-rnd(0,18)}s;`;
+  });
+  if (kind === 'autumn') add(Math.round(24*scale), el => {
+    const s = rnd(13,24); el.style.cssText = `left:${rnd(-5,100)}%;width:${s}px;height:${s}px;background:${pick(['#D9622B','#E08A2E','#C0392B','#E3B23C','#A8551E'])};animation-duration:${rnd(9,17)}s;animation-delay:${-rnd(0,17)}s;`;
+  });
+  if (kind === 'rain') add(Math.round(90*scale), el => {
+    el.style.cssText = `left:${rnd(0,125)}%;height:${rnd(45,95)}px;opacity:${rnd(.5,1)};animation-duration:${rnd(.7,1.4)}s;animation-delay:${-rnd(0,2)}s;`;
+  });
+  if (kind === 'firefly') add(Math.round(34*scale), el => {
+    const s = rnd(3,6);
+    el.style.cssText = `left:${rnd(0,100)}%;top:${rnd(isHead?10:20,95)}%;width:${s}px;height:${s}px;`+
+      `--dx1:${px(rnd(-90,90))};--dy1:${px(rnd(-70,70))};--dx2:${px(rnd(-140,140))};--dy2:${px(rnd(-90,90))};--dx3:${px(rnd(-90,90))};--dy3:${px(rnd(-60,60))};`+
+      `animation-duration:${rnd(9,18)}s,${rnd(2.5,5)}s;animation-delay:${-rnd(0,18)}s,${-rnd(0,5)}s;`;
+  });
+  if (kind === 'sky'){
+    if (!isHead) addC(1, 'sun', () => {});
+    addC(isHead ? 3 : 7, 'cloud', el => {
+      const w = rnd(140,300);
+      el.style.cssText = `top:${rnd(isHead?0:4, isHead?70:75)}%;left:0;width:${w}px;height:${w*.32}px;opacity:${isHead?rnd(.12,.22):rnd(.6,.95)};animation-duration:${rnd(55,120)}s;animation-delay:${-rnd(0,120)}s;`;
+    });
+  }
+  if (kind === 'galaxy'){
+    addC(Math.round(110*scale), 'star', el => {
+      const s = rnd(1,3); el.style.cssText = `left:${rnd(0,100)}%;top:${rnd(0,100)}%;width:${s}px;height:${s}px;animation-duration:${rnd(2,6)}s;animation-delay:${-rnd(0,6)}s;`;
+    });
+    if (!isHead) addC(2, 'shoot', (el,k) => {
+      el.style.cssText = `right:${rnd(-5,25)}%;top:${rnd(2,30)}%;animation-duration:${9+k*5}s;animation-delay:${-rnd(0,8)}s;`;
+    });
+  }
+  if (kind === 'meadow'){
+    if (!isHead){
+      const n = Math.max(60, Math.round(window.innerWidth/9));
+      addC(n, 'blade', (el,k) => {
+        const h = rnd(40,120), a = rnd(3,9);
+        el.style.cssText = `left:${(k/n*100 + rnd(-.6,.6)).toFixed(2)}%;height:${h}px;background:${pick(['linear-gradient(to top,#4E8A2E,#8CCB5E)','linear-gradient(to top,#3F7A27,#7DBF4F)','linear-gradient(to top,#5B9A35,#A6D86E)'])};`+
+          `--a1:${-a}deg;--a2:${a*.6}deg;animation-duration:${rnd(2.2,4)}s;animation-delay:${-rnd(0,4)}s;`;
+      });
+      addC(4, 'fly', el => {
+        el.style.cssText = `left:${rnd(5,90)}%;top:${rnd(25,70)}%;--c:${pick(['#F6B24A','#FFFFFF','#9CC8FF','#F59BC0'])};--dx1:${px(rnd(-160,160))};--dy1:${px(rnd(-90,60))};--dx2:${px(rnd(-200,200))};--dy2:${px(rnd(-60,80))};animation-duration:${rnd(7,12)}s;`;
+      });
+    }
+    addC(Math.round(18*scale), 'pollen', el => {
+      const s = rnd(3,5); el.style.cssText = `left:${rnd(0,100)}%;bottom:${rnd(0,30)}%;width:${s}px;height:${s}px;animation-duration:${rnd(8,15)}s;animation-delay:${-rnd(0,15)}s;`;
+    });
+  }
+  if (kind === 'wind'){
+    addC(Math.round(12*scale), 'gust', el => {
+      el.style.cssText = `top:${rnd(4,96)}%;width:${rnd(18,42)}%;animation-duration:${rnd(2.4,5)}s;animation-delay:${-rnd(0,6)}s;`; });
+    addC(Math.round(10*scale), 'blow', el => { const s = rnd(10,18);
+      el.style.cssText = `top:${rnd(5,95)}%;width:${s}px;height:${s}px;background:${pick(['#6FBF8E','#3FA796','#9BD17C'])};animation-duration:${rnd(4,8)}s;animation-delay:${-rnd(0,8)}s;`; });
+  }
 }
 
-function setFx(kind){
+function setFx(kind, remember){
   currentFx = kind;
+  const style = FX_STYLES.find(s => s.id === kind);
+  document.documentElement.dataset.theme = (!style || style.group === 'classic') ? 'default' : kind;
   fillFxLayer(document.getElementById('fxPage'), 'page', kind, 1);
   fillFxLayer(document.getElementById('fxHead'), 'head', kind, .45);
-  try { localStorage.setItem(FX_KEY, kind); } catch(e) {}
+  if (remember){ try { localStorage.setItem(FX_KEY, kind); } catch(e) {} }
 }
 
 function populateFxSelect(){
   const sel = document.getElementById('fxSelect');
-  sel.innerHTML = FX_STYLES.map(s => `<option value="${s.id}">✨ ${s[currentLang]}</option>`).join('');
+  sel.innerHTML = Object.keys(FX_GROUPS).map(g =>
+    `<optgroup label="${FX_GROUPS[g][currentLang]}">` +
+    FX_STYLES.filter(s => s.group === g).map(s => `<option value="${s.id}">${s.icon} ${s[currentLang]}</option>`).join('') +
+    `</optgroup>`).join('');
   sel.value = currentFx;
 }
 
@@ -1003,7 +1156,7 @@ async function init(){
     applyLanguage();
   });
   document.getElementById('exportBtn').addEventListener('click', exportToExcel);
-  document.getElementById('fxSelect').addEventListener('change', (e) => setFx(e.target.value));
+  document.getElementById('fxSelect').addEventListener('change', (e) => setFx(e.target.value, true));
 
   const todayD = new Date();
   const minD = new Date(MIN_DATE), maxD = new Date(MAX_DATE);
